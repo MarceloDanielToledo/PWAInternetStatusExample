@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@implements IDisposable
+@if (IsOnline)
+{
+    <MudIcon Icon="@Icons.Material.Outlined.SignalWifiStatusbar4Bar"
+             Title="Online"
+             Color="Color.Success" />
+}
+else
+{
+    <MudIcon Icon="@Icons.Material.Outlined.SignalWifiStatusbarConnectedNoInternet4"
+             Title="Offline, Some functionalities are disabled"
+             Color="Color.Error" />
+}
+@code {
+    protected bool IsOnline => _networkState.IsOnline;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _networkState.StatusChanged += NetworkStatusChanged;
+
+    }
+
+    private void NetworkStatusChanged()
+    {
+
+        StateHasChanged();
+
+    }
+    public void Dispose()
+    {
+        _networkState.StatusChanged -= NetworkStatusChanged;
+    }
+}
