@@ -1,5 +1,31 @@
 ﻿@page "/"
 
 <h1>Hello, world!</h1>
+@if (IsOnline)
+{
+    <h2 style="color:lawngreen"> Online </h2>
+}
+else
+{
+    <h2 style="color:red"> Offline </h2>
+}
 @code{
+    protected bool IsOnline => _networkState.IsOnline;
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _networkState.StatusChanged += NetworkStatusChanged;
+
+    }
+
+    private void NetworkStatusChanged()
+    {
+
+        StateHasChanged();
+
+    }
+    public void Dispose()
+    {
+        _networkState.StatusChanged -= NetworkStatusChanged;
+    }
 }
